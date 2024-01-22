@@ -1,0 +1,3 @@
+- Compile a `.java` file with `javac 'file-name'.java`.
+- Run your compiled class file with `java 'file-name'`.
+- You can also directly execute java files with `java 'file-name'`.
