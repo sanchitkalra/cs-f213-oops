@@ -6,3 +6,7 @@
 - If we are declaring multiple `main` functions in a single java file, only one of the classes can be a public class whose name should be the same as the name of the file, and the main function that will be called will be of the class whose name is the same as file name. 
 	- Technically you can get away with not declaring any class public and in that case if your compile and then run, it takes the class whose name is the same as your file name to select the main function to invoke.
 	- If in the other case that no class is declared public and you directly run the code with `java 'file-name'.java`, the first main method declared in the file will be used and no file name matching will happen because file name being same as the class name is a rule that only applies to public classes. 
+- There are 3 kinds of loops
+	- for loop
+	- while loop
+	- do while loop : this loop is guaranteed to run at least once

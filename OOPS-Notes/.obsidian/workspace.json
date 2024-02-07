@@ -18,8 +18,21 @@
                 "source": false
               }
             }
+          },
+          {
+            "id": "b52dca462cc85ead",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Basics.md",
+                "mode": "source",
+                "source": false
+              }
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -146,10 +159,11 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "3bcf9a52daf023da",
+  "active": "b52dca462cc85ead",
   "lastOpenFiles": [
     "Compiling and running.md",
-    "Encapsulation, Polymorphism & Inheritance.md",
-    "Basics.md"
+    "Variables, Types, and Arrays.md",
+    "Basics.md",
+    "Encapsulation, Polymorphism & Inheritance.md"
   ]
 }
