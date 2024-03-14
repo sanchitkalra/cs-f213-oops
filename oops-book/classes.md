@@ -7,7 +7,7 @@
 - obj => instance of a class
 - declared using `class` keyword
 - by using a class we don't need to care about inner workings and they can be changed as and when needed without causing side effects outside the class
-- typical clas:
+- typical class:
 
 ```java
 class Name {
@@ -224,4 +224,184 @@ Test ob2 = ob1.increment();
 
 ## Recursion
 
-- 
+- when a method calls itself
+- when a method calls itself, new local variables and paramaters are allocated storage on the stack and the method code is executed with these new variables from the start, and as these recursive calls return, the old local variables and parameteres are removed from the stack.
+- recusrive routines are slower than iterative routines, because of the additional overhead of additional method calls.
+- too many recursive calls can lead to a stack overflow exception.
+- all recusrive methods must containing a breaking condition, or the recursive method will never return and cause a stack overflow.
+
+## Access Control
+
+- how a member of a class is accessed is controled by access modifiers.
+- **public**: the member can be accessed via other code outside the class as well.
+- **private**: the member can only be accessed via code (other members) inside the class.
+- main() is always public because it is called by code outside the program and hence needs to be public to be accessible to it.
+- **default**: when no access specifier is used, the default is this access level. here the members are public within the package, but private outside this package.
+- the access modifier is written before the type specification of the member. example: `private int count;`. here private is the access specifier, amd int is the type.
+
+## Static keyword
+
+- usually members of a class are accessed within the context of an object of that class, but if we want to access certain members without instantiating a class, we can use the keyword `static`. 
+- static members can be accessed before any objects are create and without reference to any object.
+- main() is static because it is called before any objects exist. 
+- instance variables declared static are in effect global variables. hence when objects of a class are declared, no copies of the static variables are made, all instances of the class uses the same static variable.
+- static method limitations:
+    - they can only call other static members
+    - they can only access other static variables
+    - cannot refer to `this` or `super` in any way.
+- example:
+```java
+// Demonstrate static variables, methods, and blocks.
+class UseStatic {
+    static int a = 3; // 1. a is initialised to 3.
+    static int b;
+
+    // 4. finally meth runs and prints all the values
+    static void meth(int x) {
+        System.out.println("x = " + x);
+        System.out.println("a = " + a);
+        System.out.println("b = " + b);
+    }
+
+    static { // 2. this static block runs and inits b to a*4. 
+        System.out.println("Static block initialized.");
+        b = a * 4;
+    }
+    
+    // 3. then this main block runs and makes a call to meth.
+    public static void main(String[] args) {
+        meth(42);
+    }
+}
+```
+- outside of the class in which they are defined, static methods and variables can be used independently of any object.
+- calling a static method: `ClassName.methodName();`. here ClassName is the actual name of the class & not an instance of the class.
+
+## final keyword
+
+- a field declared as `final` cannot be modified, in effect making it a constant.
+- example: `final int AGE = 21;`. now age is set to 21 and can never be modified. it is commmon to use upper case names for constants.
+- declaring a parameter final prevents it from being changed inside the method.
+
+## Nested Classes
+
+- a class defined within another class.
+- scope bounded by the scope of the enclosing class. the class can be defined anywhere, even when they're not members of the enclosing class, for example when declared inside a for loop or an if condition block.
+- an instance of a nested class can only be created in the context of the enclosing class.
+- if B is defined inside A => 
+    1. B cannot exist independently of A
+    2. B has access to all private members of A, but vice versa is not true
+    3. B is a member of A
+- two types of nested classes:
+    1. static nested class. has the static modifier applied and cannot access the non static members of the enclosing class without an object
+    2. inner class. non static nested class. access to all variables and methods of the outer class in the same way any other member of the class has access
+- inner class example:
+```java
+class Outer {
+    int x = 10;
+
+    void test() {
+        Inner inner = new Inner();
+        inner.display();
+    }
+
+    class Inner {
+        void display() {
+            System.out.println(x);
+        }
+    }
+}
+
+class Main {
+    public static void main(String[] args) {
+        Outer outer = new Outer();
+        outer.test();
+    }
+}
+```
+
+## Strings
+
+- all strings (even string constants) are really objects of type String.
+- Strings are immutable.
+- peer classes of String: StringBuffer & StringBuilder.
+- can use concatenation (`+`)
+- common methods from the String class are `boolean equals(secondString)`, `length()`, `char charAt(index)`.
+- array of strings: `String[] arrayOfStrings = {"one", "two", "theee" };`
+
+## Command Line Arguments
+
+- command line arguments are passed as strings and are passed as the args parameter to the main method.
+- for example, if the program invocation was as: `java CommandLineExample 1 2 3 abc`, the array would hold `1 2 3 abc` all as strings.
+
+## Variable Length Arguments
+
+- if we'd like a method to accept a variable sized amount of arguments each time that method was called, we can construct the function in the following way:
+```java
+void myMethod(int ... v) {
+    // my method can be called with 0 to any number of arguments.
+    // v is implicitly declared as an array of int, but theoretically you could you use any other data type in place of int.
+    // if no arguments are passed to the function, the length of the array is zero.
+    // we can iterate over v normally like any other array
+    for (int x: v) {
+        System.out.println(x);
+    }
+
+    // some logic for the method
+}
+```
+- The ... syntax simply tells
+the compiler that a variable number of arguments will be used, and that these arguments will
+be stored in the array referred to by v. 
+- a method may have AT MOST ONE variable length argument parameter.
+- we can also combine normal parameters with variable length parameters, just that the variable length parameters should declared last the method. if the variable sized parameters is not in the end, it will be treated as incorrect and the compiler will throw an error.
+```java
+void order(int tableNumber, int ... items) {
+    // say this method is for ordering items of a menu
+    // now it needs an table number and the items that table order, which could be any number of items (potentially zero)
+    
+    // in this case the first argument is matched to tableNumber and any subsequent arguments are matched to items
+
+    System.out.println("processing order for table number: " + tableNumber);
+
+    System.out.println("Orders: ");
+    for (int itemID: items) {
+        System.out.println(itemID);
+    }
+}
+```
+- variable length parameter methods can be overloaded just like any other methods.
+```java
+class Vars {
+    void method1() {
+        System.out.println("no params");
+    }
+
+    void method1(int... v) {
+        System.out.println("variable length params");
+        for (int x : v) {
+            System.out.println(x);
+        }
+    }
+
+    void method1(String name, int... v) {
+        System.out.println("normal + variable length params");
+        System.out.println(name);
+        for (int x : v) {
+            System.out.println(x);
+        }
+    }
+}
+
+public class VariableLengthArgs {
+    public static void main(String[] args) {
+        Vars v = new Vars();
+        v.method1();
+        v.method1(1, 2, 3, 4, 4);
+        v.method1("Sanchit", 2, 3, 4, 4);
+    }
+}
+```
+- overload may also have certain pitfalls to be aware of
+    1. say there are two version of a method one with the signature `void x(int n, int ... v)` and `void x(int ... v)`. now if you make a call to, say, x(1), such a call cannot be resolved because both functions can accept and handle this invocation, and this is an ambiguous call.
+    2. say there are two version of a method one with the signature `void x(int ... v)` and `void x(boolean ... v)`. now say you call, x(). again the call is ambiguous and the compiler cannot decide which function to call for you.
