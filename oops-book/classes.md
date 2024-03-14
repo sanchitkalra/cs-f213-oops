@@ -1,5 +1,7 @@
 # Classes
 
+_this document refers to ch6 and ch7 of the textbook_
+
 - basis for object oriented programming 
 - all concepts encapsulated as classes
 - compiled code is stored as a `.class` file
