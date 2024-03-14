@@ -1,4 +1,6 @@
 {
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "redhat.java"
+  "editor.defaultFormatter": "redhat.java",
+  "editor.wordWrap": "wordWrapColumn",
+  "editor.wordWrapColumn": 80
 }

@@ -29,7 +29,7 @@ public class PrimeOrNot {
         System.out.println(String.format("%d is %s and is %s", n, nt.testOddOrEven(n) ? "even" : "odd",
                 nt.isPrime(n) ? "prime" : "not prime"));
         char ch1 = 88;
-        System.out.println("" + (char) 88);
+        System.out.println("" + (char) ch1);
 
         sc.close();
     }
