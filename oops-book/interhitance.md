@@ -1,5 +1,7 @@
 # Inheitance
 
+_this document refers to ch8 of the textbook_
+
 - create a class with a set of traits common to a set of related items
 - inherited class -> superclass. inheriting class -> subclass
 - _subclass is a specialised version of the superclass_
