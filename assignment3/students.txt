@@ -1,0 +1,100 @@
+display 13
+stats
+delete 19
+delete 1
+display 19
+delete 16
+display 11
+stats
+insert 8 Sem Maths 6.90
+stats
+save result.txt
+dump
+save result.txt
+display 12
+dump
+display 5
+stats
+stats
+dump
+save result.txt
+delete 17
+save result.txt
+insert 14 Hendrerit HSS 8.54
+insert 19 Ullamcorper Civil 5.07
+display 17
+display 13
+save result.txt
+display 11
+save result.txt
+display 14
+dump
+stats
+display 8
+delete 8
+display 20
+save result.txt
+save result.txt
+display 9
+save result.txt
+save result.txt
+stats
+stats
+stats
+dump
+display 15
+insert 14 Sem CSIS 4.31
+delete 16
+save result.txt
+delete 12
+insert 15 Urna Maths 6.22
+stats
+delete 9
+display 14
+save result.txt
+dump
+stats
+save result.txt
+delete 19
+insert 11 In EEE 5.19
+delete 16
+display 7
+display 17
+display 2
+save result.txt
+dump
+stats
+stats
+dump
+save result.txt
+dump
+delete 8
+insert 9 Quam EEE 8.43
+dump
+save result.txt
+delete 6
+display 13
+display 11
+delete 8
+delete 18
+save result.txt
+delete 15
+stats
+display 15
+display 9
+save result.txt
+display 11
+stats
+stats
+display 5
+display 18
+delete 6
+display 3
+save result.txt
+save result.txt
+display 3
+display 19
+delete 11
+display 19
+display 5
+display 5
