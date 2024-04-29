@@ -2,6 +2,7 @@ package com.oops.csf213;
 
 import com.oops.csf213.run.Location;
 import com.oops.csf213.run.Run;
+import com.oops.csf213.run.RunRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -35,14 +36,22 @@ public class Application {
         */
     }
 
-    // this run after the application has started & the context has been created
-    // context -> (the container for all beans in the system)
-    @Bean
-    CommandLineRunner runner() {
-        return args -> {
-            Run run = new Run(1, "first rune", LocalDateTime.now(), LocalDateTime.now().plus(1, ChronoUnit.HOURS), 120, Location.OUTDOOR);
-            log.info("Run: " + run);
-        };
-    }
+    /*
+     this run after the application has started & the context has been created
+     context -> (the container for all beans in the system)
+     CommandLineRunner is a functional interface, ie, an interface that has a
+     single abstract method and can be used as a lambda expression
+     although this is fine, we will do it better
+
+        @Bean
+        CommandLineRunner runner(RunRepository runRepository) {
+            return args -> {
+                // programmatically bootstrap data
+                Run run = new Run(1, "first run", LocalDateTime.now(), LocalDateTime.now().plus(1, ChronoUnit.HOURS), 120, Location.OUTDOOR);
+                // log.info("Run: " + run);
+                runRepository.create(run);
+            };
+        }
+    */
 
 }

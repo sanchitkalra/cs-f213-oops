@@ -1,4 +1,7 @@
 {
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "redhat.java",
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
 }
