@@ -1,9 +1,10 @@
 package com.oop.socials.post;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.oop.socials.post.comment.Comment;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class PostDetails {
     LocalDate date;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("post")
     private List<Comment> comments = new ArrayList<>();
 
     public Integer getPostID() {
