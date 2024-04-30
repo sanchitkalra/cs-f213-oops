@@ -1,9 +1,8 @@
 package com.oop.socials.post;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
+@Entity
 public class Comment {
     @Id
     @GeneratedValue(strategy =  GenerationType.AUTO)
@@ -11,5 +10,11 @@ public class Comment {
 
     String commentBody;
 
-    CommentCreator commentCreator;
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private PostDetails post;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "userID")
+    private CommentCreator commentCreator;
 }
