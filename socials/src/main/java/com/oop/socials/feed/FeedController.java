@@ -18,8 +18,6 @@ public class FeedController {
 
     @GetMapping("/")
     List<PostDetails> getPosts() {
-        List<PostDetails> posts = new ArrayList<>();
-        postRepository.findAll().forEach(posts::add);
-        return posts;
+        return postRepository.findByOrderByPostIDDesc();
     }
 }
