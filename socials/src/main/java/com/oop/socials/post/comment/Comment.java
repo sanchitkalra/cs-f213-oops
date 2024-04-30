@@ -1,5 +1,6 @@
 package com.oop.socials.post.comment;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.oop.socials.post.PostDetails;
 import jakarta.persistence.*;
 
@@ -13,10 +14,12 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "post_id")
+    @JsonIgnore
     private PostDetails post;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "userID")
+    @JsonIgnore
     private CommentCreator commentCreator;
 
     public int getCommentID() {
