@@ -6,14 +6,14 @@ import jakarta.persistence.*;
 public class UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer id;
+    Integer userID;
     String name;
     String email;
     public UserDetails() {}
 
-    public UserDetails(String name, Integer id, String email) {
+    public UserDetails(String name, Integer userID, String email) {
         this.name = name;
-        this.id = id;
+        this.userID = userID;
         this.email = email;
     }
 
@@ -30,12 +30,12 @@ public class UserDetails {
         this.name = name;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getUserID() {
+        return userID;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setUserID(Integer userID) {
+        this.userID = userID;
     }
 
     public String getEmail() {

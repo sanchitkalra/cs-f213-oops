@@ -2,6 +2,7 @@ package com.oop.socials.post.comment;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.oop.socials.post.PostDetails;
+import com.oop.socials.user.UserDetails;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,10 +18,10 @@ public class Comment {
     @JsonIgnore
     private PostDetails post;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "userID")
-    @JsonIgnore
-    private CommentCreator commentCreator;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+//    @JsonIgnore
+    private UserDetails commentCreator;
 
     public int getCommentID() {
         return commentID;
@@ -46,11 +47,11 @@ public class Comment {
         this.post = post;
     }
 
-    public CommentCreator getCommentCreator() {
+    public UserDetails getCommentCreator() {
         return commentCreator;
     }
 
-    public void setCommentCreator(CommentCreator commentCreator) {
+    public void setCommentCreator(UserDetails commentCreator) {
         this.commentCreator = commentCreator;
     }
 }

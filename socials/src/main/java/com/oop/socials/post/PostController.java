@@ -1,6 +1,9 @@
 package com.oop.socials.post;
 
 import com.oop.socials.lib.Errors;
+import com.oop.socials.user.UserDetails;
+import com.oop.socials.user.UserRepository;
+import org.apache.catalina.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -9,9 +12,11 @@ import java.util.Optional;
 @RestController
 public class PostController {
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
-    PostController(PostRepository postRepository) {
+    PostController(PostRepository postRepository, UserRepository userRepository) {
         this.postRepository = postRepository;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/post")
@@ -25,9 +30,21 @@ public class PostController {
     }
 
     @PostMapping("/post")
-    Object makePost(@RequestBody PostDetails postRequest) {
-        postRequest.setDate(LocalDate.now());
-        return postRepository.save(postRequest);
+    Object makePost(@RequestBody PostDTO postRequest) {
+        Integer userId = postRequest.userID;
+
+        UserDetails user = userRepository.findById(postRequest.userID).orElse(null);
+
+        if (user == null) {
+            return Errors.error("User does not exist");
+        }
+
+        PostDetails post = new PostDetails();
+        post.setPostBody(postRequest.postBody);
+        post.setDate(LocalDate.now());
+        postRepository.save(post);
+
+        return "Post created successfully";
     }
 
     @PatchMapping("/post")

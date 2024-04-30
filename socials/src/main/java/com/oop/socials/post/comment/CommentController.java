@@ -44,27 +44,33 @@ public class CommentController {
 //        cc.setName(usr.get().getName());
 //        cc.setUserID(userId);
 
-        Optional<CommentCreator> cc = commentCreatorRepository.findById(userId);
-        if (cc.isEmpty()) {
-            CommentCreator newCC = new CommentCreator();
-            newCC.setName(usr.get().getName());
-            newCC.setUserID(userId);
-            CommentCreator savedCC = commentCreatorRepository.save(newCC);
+//        Optional<CommentCreator> cc = commentCreatorRepository.findById(userId);
+//        if (cc.isEmpty()) {
+//            CommentCreator newCC = new CommentCreator();
+//            newCC.setName(usr.get().getName());
+//            newCC.setUserID(userId);
+//            CommentCreator savedCC = commentCreatorRepository.save(newCC);
+//
+//            Comment newComment = new Comment();
+//            newComment.setCommentBody((String) requestBody.get("commentBody"));
+//            newComment.setCommentCreator(savedCC);
+//            newComment.setPost(post.get());
+//
+//            commentRepository.save(newComment);
+//        } else {
+//            Comment newComment = new Comment();
+//            newComment.setCommentBody((String) requestBody.get("commentBody"));
+//            newComment.setCommentCreator(cc.get());
+//            newComment.setPost(post.get());
+//
+//            commentRepository.save(newComment);
+//        }
 
-            Comment newComment = new Comment();
-            newComment.setCommentBody((String) requestBody.get("commentBody"));
-            newComment.setCommentCreator(savedCC);
-            newComment.setPost(post.get());
-
-            commentRepository.save(newComment);
-        } else {
-            Comment newComment = new Comment();
-            newComment.setCommentBody((String) requestBody.get("commentBody"));
-            newComment.setCommentCreator(cc.get());
-            newComment.setPost(post.get());
-
-            commentRepository.save(newComment);
-        }
+        Comment newComment = new Comment();
+        newComment.setCommentCreator(usr.get());
+        newComment.setPost(post.get());
+        newComment.setCommentBody((String) requestBody.get("commentBody"));
+        commentRepository.save(newComment);
 
         return "Comment created successfully";
     }
