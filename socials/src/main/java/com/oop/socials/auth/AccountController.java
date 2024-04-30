@@ -1,5 +1,6 @@
 package com.oop.socials.auth;
 
+import com.oop.socials.lib.Errors;
 import com.oop.socials.user.UserDetails;
 import com.oop.socials.user.UserRepository;
 import org.apache.catalina.User;
@@ -26,7 +27,7 @@ public class AccountController {
     }
 
     @PostMapping("/login")
-    String login(@RequestBody Account account) {
+    Object login(@RequestBody Account account) {
         Optional<Account> retAccount =  accountRepository.findById(account.email);
         if (retAccount.isPresent()) {
             // user exists, now check if password matches
@@ -35,15 +36,15 @@ public class AccountController {
                 return "Login Successful";
             } else {
                 // password incorrect
-                return "Username/Password Incorrect";
+                return Errors.error("Username/Password Incorrect");
             }
         } else {
-            return "User does not exist";
+            return Errors.error("User does not exist");
         }
     }
 
     @PostMapping("/signup")
-    String signup(@RequestBody SignupRequest signupRequest) {
+    Object signup(@RequestBody SignupRequest signupRequest) {
         Optional<Account> retAccount = accountRepository.findById(signupRequest.email);
 
         if (retAccount.isEmpty()) {
@@ -57,7 +58,7 @@ public class AccountController {
             return "Account Creation Successful";
         } else {
             // user account already exists, forbidden
-            return "Forbidden, Account already exists";
+            return Errors.error("Forbidden, Account already exists");
         }
     }
 

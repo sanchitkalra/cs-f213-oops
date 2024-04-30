@@ -31,13 +31,13 @@ public class CommentController {
         Integer userId = (Integer) requestBody.get("userID");
         Optional<UserDetails> usr = userRepository.findById(userId);
         if (usr.isEmpty()) {
-            return "User does not exist";
+            return Errors.error("User does not exist");
         }
 
         Integer postId = (Integer) requestBody.get("postID");
         Optional<PostDetails> post = postRepository.findById(postId);
         if (post.isEmpty()) {
-            return "Post does not exist";
+            return Errors.error("Post does not exist");
         }
 
 //        CommentCreator cc = new CommentCreator();

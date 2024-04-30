@@ -1,5 +1,6 @@
 package com.oop.socials.post;
 
+import com.oop.socials.lib.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -19,7 +20,7 @@ public class PostController {
         if (postDetailsOptional.isPresent()) {
             return postDetailsOptional.get();
         } else {
-            return "Post does not exist";
+            return Errors.error("Post does not exist");
         }
     }
 
@@ -39,7 +40,7 @@ public class PostController {
             postRepository.save(newPost);
             return "Post edited successfully";
         } else {
-            return "Post does not exist";
+            return Errors.error("Post does not exist");
         }
     }
 
@@ -50,7 +51,7 @@ public class PostController {
             postRepository.deleteById(postId);
             return "Post deleted";
         } else {
-            return "Post does not exist";
+            return Errors.error("Post does not exist");
         }
     }
 
