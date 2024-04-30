@@ -1,9 +1,6 @@
 package com.oop.socials.user;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class UserDetails {
@@ -12,7 +9,6 @@ public class UserDetails {
     Integer id;
     String name;
     String email;
-
     public UserDetails() {}
 
     public UserDetails(String name, Integer id, String email) {

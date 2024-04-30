@@ -1,12 +1,11 @@
 package com.oop.socials.post.comment;
 
+import com.oop.socials.lib.Errors;
 import com.oop.socials.post.PostDetails;
 import com.oop.socials.post.PostRepository;
 import com.oop.socials.user.UserDetails;
 import com.oop.socials.user.UserRepository;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 import java.util.Optional;
@@ -68,6 +67,41 @@ public class CommentController {
         }
 
         return "Comment created successfully";
+    }
+
+    @GetMapping("/comment")
+    Object getComment(@RequestParam("commentID") Integer commentId) {
+        Optional<Comment> commentOptional = commentRepository.findById(commentId);
+        if (commentOptional.isPresent()) {
+            return commentOptional.get();
+        } else {
+            return Errors.error("Comment does not exist");
+        }
+    }
+
+    @DeleteMapping("/comment")
+    Object deleteComment(@RequestParam("commentID") Integer commentId) {
+        Optional<Comment> commentOptional = commentRepository.findById(commentId);
+        if (commentOptional.isPresent()) {
+            commentRepository.deleteById(commentId);
+            return "Comment deleted";
+        } else {
+            return Errors.error("Comment does not exist");
+        }
+    }
+
+    @PatchMapping("/comment")
+    Object patchComment(@RequestBody Map<String, Object> requestBody) {
+        Integer commentId = (Integer) requestBody.get("commentID");
+        Optional<Comment> commentOptional = commentRepository.findById(commentId);
+        if (commentOptional.isPresent()) {
+            Comment newComment = commentOptional.get();
+            newComment.setCommentBody((String) requestBody.get("commentBody"));
+            commentRepository.save(newComment);
+            return "Comment edited successfully";
+        } else {
+            return Errors.error("Comment does not exist");
+        }
     }
 
 }
