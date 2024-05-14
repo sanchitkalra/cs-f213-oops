@@ -1,5 +1,7 @@
 # I/O
 
+_this doc refers to ch 13&22 of the textbook_
+
 ## Streams
 
 - stream -> abstraction -> either produce or consume information -> linked to a physical device by Java IO system
@@ -383,6 +385,353 @@ class MyClass {
 
     MyClass() {
         this(0); // this() here calls the MyClass(int) constructor which in turn calls the MyClass(int, int) constructor
+    }
+}
+```
+
+## File class
+
+- describe the properties of a file, not how the file is stored or information is retrived
+- not stream based
+- used to obtain/manipulate the information associated with a disk file
+- a directory is also treated as a file, but with a list of filenames (can be retrieved using the `list()` method)
+
+```java
+// key constructors
+
+File(String directoryPath)
+File(String directoryPath, String filename)
+File(File dirObj, String filename)
+File(URI uriObj)
+```
+
+- non-obvious methods
+  - `isFile()` -> return true if called on a file, and false is called on a directory, or special files like device drivers, pipes
+  - `isAbsolute()` -> true if path is absolute, false if relative
+- other methods
+  - `boolean renameTo(File newName)`
+  - `boolean delete()` -> if called on a dir, only executes if dir is empty
+- convert to Path (part of NIO) using the `Path toPath()` method
+- this class implements the `Comparable` interface to `compareTo()` method is available
+
+### Directories
+
+- a special file that contains a list of other files and directories
+- isDirectory returns true; can call `String[] list()` to get list of files and dirs inside
+- we can filter the list of file returned by using `String[] list(FilenameFilter FFObj)` where FFObj is an instance of a class that implements the FilenameFilter interface (defines a method `boolean accept(File directory, String filename)` which is called for every file in a list, true => included in list)
+
+```java
+// only list files with a specific extension
+
+public class Ext implements FilenameFilter {
+    String ext;
+    public Ext(String ext) {
+        this.ext = ext;
+    }
+
+    // this method of the interface we need to implement
+    public boolean accept(File dir, String name) {
+        return name.endsWith(this.ext);
+    }
+}
+
+// can use it as
+
+psvm() {
+    File f1 = new File(dirName);
+    FilenameFilter filter = new Ext("pdf");
+    String[] files = f1.list(filter); // list of files that have the pdf extension
+}
+```
+
+- alternatively we can use the following methods to retrieve the list of files as an array of File objects rather than String
+
+```java
+File[] listFiles()
+File[] listFiles(FilenameFilter FFObj)
+File[] listFiles(FileFilter FObj) // returns files that satify FileFilter which has just one method to be implemented `boolean accept(File path)`
+```
+
+- new dirs can be created using the `mkdir()` (fails if the entrie path doesn't exist yet), and `mkdirs()` (works even if the entire path doesn't exist yet) methods
+
+## AutoCloseable, Closeable, and Flushable Interfaces
+
+- Closable and Flushable are defined in java.io and AutoClosable in java.lang
+- AutoClosable used for try-with-resources
+  - defines only the `void close() throws Exception`
+- Closable extends AutoClosable
+- Flusable can force buffered output to be written to the stream to which the object is attached
+  - defines `void flush() throws IOException`
+  - buffered output physically written to the underlying device
+
+## IOException
+
+- IO error -> IOException
+- FileNotFoundException subclass of IOException
+
+## Ways to close streams
+
+- stream must be closed when not needed
+- explicitly call `close()` inside the finally block or an implicit call to close via the try with resources approach
+
+## Stream Classes
+
+- four key abstract classes: InputStream, OutputStream, Reader, Writer
+  - first two for byte streams and second two for char streams
+
+## Byte Streams
+
+- useful for any kind of object, including binary data
+
+### InputStream
+
+- streaming byte input
+- implements Closable and AutoClosable
+
+### OutputStream
+
+- streaming byte output
+- implements AutoClosable, Closable, and Flushable interfaces
+
+### FileInputStream
+
+- creates an InputStream to read bytes from files
+
+```java
+// common constructors
+
+FileInputStream(String filepath); // full path of file
+FileInputStream(File fileObj); // file obj that describes the file
+```
+
+- throws FileNotFoundException
+- see pg 759 of textbook PDF for a list of fns
+- creating a stream also opens the stream for reading
+- mark and reset methods are not overridden, and a call to reset results in IOException
+
+```java
+psvm() {
+    int size;
+
+    try (FileInputStream f = new FileInputStream(fileName)) {
+        size = f.available(); // total number of bytes in the file available
+
+        char x = (char) f.read(); // first byte of file; int typecasted to char
+
+        byte[] b = new byte[10];
+        if (f.read(b) != 10) {
+            // check if 10 bytes were read into the byte array b
+        } else {
+            // convert to String
+            String str = new String(b, 0, 10);
+        }
+
+        f.skip(5); // skip 5 bytes
+
+        f.available(); // finally see how many bytes are still available to read
+    }
+}
+```
+
+### FileOutputStream
+
+- creates OutputStream
+- write bytes to file
+- implements Closable, AutoClosable, and Flushable
+
+```java
+// common constructors
+// they can throw a FileNotFoundException
+FileOutputStream(String filePath)
+FileOutputStream(File fileObj)
+
+// if append true -> open in append mode
+FileOutputStream(String filePath, boolean append)
+FileOutputStream(File fileObj, boolean append)
+```
+
+- does not depend on the file already existing, if it doesn't exist, it will be created
+- if you attempt to access a read only write, exception
+
+```java
+psvm() {
+    FileOutputStream f1 = null;
+
+    try {
+        f1 = new FileOutputStream(fileName);
+
+        String txt = "HelloWorld!";
+        byte[] bytes = txt.getBytes();
+
+        for (int k = 0; k < bytes.length; k++) {
+            f1.write(bytes[k]); // write individual bytes
+        }
+
+        f1.write(bytes); // write entire byte array
+
+        f1.write(bytes, bytes.length - bytes.length/2, bytes.length/2); // write the second half of the bytes, 2nd arg -> offset from 0 of byte array, 3rd arg -> number of bytes to write
+    } catch (IOException e) {
+        // handle exception
+    } finally {
+        try {
+            if (f1 != null) f1.close();
+        } catch (IOException e) {
+            // handle file closing exception
+        }
+    }
+}
+```
+
+### ByteArrayInputStream
+
+- implementation of input stream that uses byte array as source
+
+```java
+// constructors
+ByteArrayInputStream(byte[] array)
+ByteArrayInputStream(byte[] array, int start, int numBytes)
+```
+
+- close has no effect on this
+- implements mark and reset methods
+  - if mark hasn't been called, reset sets the stream pointer to beginning of the stream (in this case, start of the byte array)
+
+```java
+class ByteArrayInputStreamReset {
+    public static void main(String[] args) {
+        String tmp = "abc";
+        byte[] b = tmp.getBytes();
+
+        ByteArrayInputStream in = new ByteArrayInputStream(b);
+        for (int i=0; i<2; i++) {
+            int c;
+            while ((c = in.read()) != -1) {
+                if (i == 0) {
+                    System.out.print((char) c);
+                } else {
+                    System.out.print(Character.toUpperCase((char) c));
+                }
+            }
+            System.out.println();
+            in.reset();
+        }
+    }
+}
+```
+
+### ByteArrayOutputStream
+
+- impl of OutputStream
+- destination is byte array
+
+```java
+// common constructors
+ByteArrayOutputStream() // a buffer of 32 bytes is created
+ByteArrayOutputStream(int numBytes) // size = numBytes
+```
+
+- buffer in a protected buf field
+- buffer size is increased automatically as needed
+- the number of _actual bytes stored_ is held in a protected count field
+- close() has no meaning, although calling it produces no error
+
+```java
+psvm() {
+    ByteArrayOutputStream f = new ByteArrayOutputStream(); // buffer of default size 32
+    String src = "Hello World!";
+    byte[] buf = src.getBytes();
+
+    try {
+        f.write(buf);
+    } catch (IOException e) {
+        // handle excp
+    }
+
+    // print elements line by line
+    byte[] b = f.toByteArray();
+    for (int k = 0; k < b.length; k++)
+        System.out.println((char) b[k]);
+
+    System.out.println(f.toString()); // directly convert to string
+
+    // write to another output stream
+    try (FileOutputStream f2 = new FileOutputStream(fileName)) {
+        f.writeTo(f2);
+    } catch (IOException e) {
+        // handle excp
+    }
+}
+```
+
+## Serialisation
+
+- write state of obj to a byte stream
+- to be serialisation, class must implement the `Serializable` interface
+- the interface has no members, only used to mark a class as serializable
+- class serializable -> all subclass serializable
+- transient and static variables are not saved
+
+## ObjectOutput
+
+- interface extends the DataOutput and AutoClosable interfaces
+- `writeObject(Object obj)` used to serialise an object
+
+### ObjectOutputStream
+
+- extends OutputStream and implements ObjectOutput
+- constructor `ObjectOutputStream(OutputStream outStream) throws IOException`
+  - serialized objects written to outStream
+- closing ObjectOutputStream closes the outStream automatically
+
+### ObjectInput
+
+- extends DataInput and AutoClosable
+- `readObject()` -> used to deserialize an object -> can throw a ClassNotFoundException
+
+### ObjectInputStream
+
+- extends InputStream and implements ObjectInput interface
+- constructor `ObjectInputStream(InputStream inStream) throws IOException`
+  - inStream -> stream from where serialised objects should be read
+- closing ObjectInputStream automatically closes the inStream
+
+```java
+class MyClass implements Serializable {
+    String s;
+    int i;
+    Double d;
+
+    public MyClass(String s, int i, double d) {
+        this.s = s;
+        this.i = i;
+        this.d = d;
+    }
+
+    public String toString() {
+        return "s=" + s + "; i=" + i + "; d=" + d;
+    }
+}
+
+psvm() {
+
+    // write object to output stream
+    try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(outputFile))) {
+        MyClass c1 = new MyClass("string", 1, 2.0);
+
+        oos.writeObject(c1);
+    } catch (IOException e) {
+        // handle exceptions
+    }
+
+    // read object from input stream
+    try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(outputFile))) {
+        // optionally we can add a deserialization filter as follows by using the Config nested class' createFilter method which expects a string pattern
+        ObjectInputFilter filter = ObjectInputFilter.Config.createFilter("MyClass;!*");
+        ois.setObjectInputFilter(filter);
+
+        MyClass c2 = (MyClass) ois.readObject();
+    } catch (Exception e) {
+        // handle excp
     }
 }
 ```
