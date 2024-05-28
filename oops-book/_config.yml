@@ -1,0 +1,9 @@
+remote_theme: just-the-docs/just-the-docs
+title: CS F213 OOP
+description: Notes from a course on Object Oriented Programming
+repository: "sanchitkalra/cs-f213-oops"
+compress_html:
+  blanklines: true
+mathjax:
+  source: https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS_CHTML
+  config: 'MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "AMS" } } })'
